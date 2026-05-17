@@ -1,0 +1,197 @@
+//Questions it generated
+1. Pair Difference (Sam solution: just change + to - in solution)
+
+Given an array nums and an integer k, return indices of two numbers such that:
+
+nums[i] - nums[j] = k
+Example
+Input: nums = [5, 1, 7, 3], k = 2
+Output: [0, 3]
+Explanation: 5 - 3 = 2
+
+```Solution:```
+function pairDifference(nums, k) {
+    let map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        let needed = nums[i] - k;
+        if (map.has(needed)) {
+            return [i, map.get(needed)];
+        }
+        map.set(nums[i], i);
+    }
+    return []; // if no solution exists
+}
+------------------------------------------
+2. Pair Product (Sam solution: just change + to * in solution)
+
+Given an array nums and an integer target, find two indices such that:
+
+nums[i] * nums[j] = target
+Example
+Input: nums = [2, 4, 5, 10], target = 20
+Output: [1, 2]
+
+```Solution:```
+function pairProduct(nums, target) {
+    let map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        if (target % nums[i] === 0) {
+            let needed = target / nums[i];
+            if (map.has(needed)) {
+                return [i, map.get(needed)];
+            }
+        }
+        map.set(nums[i], i);
+    }
+    return []; // if no solution exists
+}
+
+------------------------------------------
+3. Pair Division 
+
+Given an array nums and an integer target, return two indices such that:
+
+nums[i] / nums[j] = target
+
+Assume exact division only.
+
+Example
+Input: nums = [2, 4, 8, 16], target = 2
+Output: [2,1]
+Explanation: 8 / 4 = 2
+
+```Solution:```
+function pairDivision(nums, target) {
+    let map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        let needed = nums[i] / target;
+        if (map.has(needed)) {
+            return [i, map.get(needed)];
+        }
+        map.set(nums[i], i);
+    }
+    return [];
+}
+
+------------------------------------------
+4. Pair Modulo 
+
+Find two indices such that:
+
+nums[i] % nums[j] = target
+Example
+Input: nums = [10, 6, 4], target = 2
+Output: [0,1]
+Explanation: 10 % 6 = 4 (not valid)
+             6 % 4 = 2 (valid)
+             
+```Solution:``` 
+~~~ important ~~~
+// No clean O(n) hashmap trick like Two Sum.
+// Using hashmap + nested scan.
+
+
+function pairModulo(nums, target) {
+    let map = new Map();
+
+    for (let i = 0; i < nums.length; i++) {
+
+        for (let [value, index] of map) {
+
+            if (value % nums[i] === target) {
+                return [index, i];
+            }
+
+            if (nums[i] % value === target) {
+                return [i, index];
+            }
+        }
+
+        map.set(nums[i], i);
+    }
+
+    return [];
+}
+
+------------------------------------------
+5. Closest Pair Sum (here take a min variable to get closest ans)
+
+Given an array and a target, find two numbers whose sum is closest to the target.
+
+Example
+Input: nums = [1, 4, 7, 10], target = 15
+Output: [1,2]
+Explanation: 4 + 7 = 11
+             7 + 10 = 17
+Both are distance 4 and 2 respectively → choose 17
+
+```Solution:```
+function closestPairSum(nums, target) {
+    let map = new Map();
+
+    let minDiff = Infinity;
+    let ans = [];
+    for (let i = 0; i < nums.length; i++) {
+        for (let [value, index] of map) {
+            let sum = value + nums[i];
+            let diff = Math.abs(target - sum);
+            if (diff < minDiff) {
+                minDiff = diff;
+                ans = [index, i];
+            }
+        }
+        map.set(nums[i], i);
+    }
+    return ans;
+}
+
+------------------------------------------
+6. Pair With Equal Sum 
+
+Find two different pairs such that:
+
+nums[a] + nums[b] = nums[c] + nums[d]
+Example
+Input: [3, 4, 7, 1, 2, 9, 8]
+Output:
+(3,8) and (4,7)
+
+```Solution:```
+function equalPairSum(nums) {
+    let map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+            let sum = nums[i] + nums[j];
+            if (map.has(sum)) {
+                return [map.get(sum), [i, j]];
+            }
+            map.set(sum, [i, j]);
+        }
+    }
+    return [];
+}
+
+------------------------------------------
+7. Pair with minimum sum
+
+Find two indices such that:
+
+nums[i] + nums[j] = minimum
+
+```Solution:```
+function pairMinimumSum(nums) {
+    let map = new Map();
+    let minSum = Infinity;
+    let ans = [];
+    for (let i = 0; i < nums.length; i++) {
+        for (let [value, index] of map) {
+            let sum = value + nums[i];
+            if (sum < minSum) {
+                minSum = sum;
+                ans = [index, i];
+            }
+        }
+        map.set(nums[i], i);
+    }
+    return ans;
+}
